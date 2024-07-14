@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "pos-sandro": {
+      "hosting": {
+        "ngx-admin-demo": [
+          "pos-sandro"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "pos-sandro"
+  }
+}

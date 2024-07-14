@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col" *ngFor="let item of data">
+        <button nbButton (click)="item.selected = !item.selected" [status]="!item.selected?'basic':'success'">
+            <nb-card>
+                <!-- <nb-card-header>Nebula</nb-card-header> -->
+                <nb-card-body>
+                    <div class="bg-light">
+                        <img [src]="item.productImage.url" alt="product" class="product-image">
+                    </div>
+                    <h5 class="mt-4 text-center" style="font-size: 14px;
+                    width: 150px;
+                    text-wrap: wrap;">{{item.productName}}</h5>
+                </nb-card-body>
+                <nb-card-footer class="d-flex justify-content-between">
+                    <div>
+                        {{item.unitInStock}} {{item.quantityPerUnit}}
+                    </div>
+                    <div>
+                        {{item.unitPrice}}
+                    </div>
+                    
+                    
+                </nb-card-footer>
+            </nb-card>
+        </button>
+       
+    </div>
+</div>
+

@@ -1,0 +1,6 @@
+<input [nbDatepicker]="datepicker"
+(change)="updateValue($event)"
+[name]="cell.getId()"
+[disabled]="!cell.isEditable()"
+[placeholder]="cell.getTitle()">
+<nb-datepicker #datepicker></nb-datepicker>

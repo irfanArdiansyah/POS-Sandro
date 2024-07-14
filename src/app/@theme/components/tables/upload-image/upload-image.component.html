@@ -1,0 +1,9 @@
+<input [ngClass]="inputClass"
+type="file"
+(change)="updateValue($event)"
+[name]="cell.getId()"
+[disabled]="!cell.isEditable()"
+[placeholder]="cell.getTitle()"
+#fileInput
+(click)="fileInput.click()"
+/>

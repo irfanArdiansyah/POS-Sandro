@@ -1,0 +1,8 @@
+<button nbButton hero [status]="
+value == 'Active'||value == 'Approved'||value == 'Completed'?'success':
+value == 'Deactivated'?'basic':
+value == 'Pending'?'warning':
+value == 'Rejected'?'danger':'basic'
+">
+    {{value||"Not Set"}}
+</button>

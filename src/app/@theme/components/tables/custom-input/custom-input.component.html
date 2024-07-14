@@ -1,0 +1,9 @@
+<select class="form-control"
+[value]="cell.getValue()"
+[ngModel]="cell.getValue()"
+[name]="cell.getId()"
+(change)="updateValue($event)"
+[disabled]="!cell.isEditable()">
+    <option value="">-</option>
+    <option *ngFor="let item of cell.getColumn().editor.config.list" [value]="item.value" [selected]="cell.getValue()">{{item.title}}</option>
+</select>

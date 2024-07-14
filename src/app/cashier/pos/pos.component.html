@@ -1,0 +1,16 @@
+<div class="row mb-4">
+    <nb-alert *ngIf="responds?.show" [status]="responds?.status" closable (close)="responds=null">
+        {{responds?.message}}
+    </nb-alert>
+    <!-- <ngx-top-action></ngx-top-action> -->
+</div>
+
+<div class="row">
+    <div class="col-xxl-8">
+        <h4>Products</h4>
+        <ngx-products [data]="products"></ngx-products>
+      </div>
+      <div class="col-xxl-4">
+        <ngx-order-list [products]="products" [data]="data" (result)="onCompleted($event)"></ngx-order-list>
+      </div>
+</div>

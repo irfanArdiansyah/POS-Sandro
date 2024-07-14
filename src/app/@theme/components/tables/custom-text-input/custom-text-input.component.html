@@ -1,0 +1,8 @@
+<input class="form-control"
+type="text"
+(change)="updateValue($event)"
+[value]="cell.getValue()"
+[name]="cell.getId()"
+[disabled]="!cell.isEditable()"
+[placeholder]="cell.getTitle()"
+>

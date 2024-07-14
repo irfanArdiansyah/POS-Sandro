@@ -1,0 +1,28 @@
+<!-- <h1  class="text-center text-danger">
+    {{data.title}}
+</h1>
+<i *ngIf="data.icon" class="material-icons d-flex justify-content-center mb-4 text-warning">{{data.icon}}</i>
+<div  class="text-center">{{data.message}}</div>
+<div  class="d-flex justify-content-center mt-4" *ngIf="data.isDblBtn">
+    <button mat-raised-button class="btn btn-default mr-4" mat-dialog-close>Cancel</button>
+    <button mat-raised-button class="btn btn-danger ml-4" (click)="onYesConfirm()">OK</button>
+</div>
+<div mat-dialog-actions *ngIf="!data.isDblBtn">
+    <button mat-button (click)="onNoClick()">OK</button>
+</div> -->
+<nb-card>
+    <nb-card-header>{{ title }}</nb-card-header>
+    <nb-card-body>
+      {{message}}
+    </nb-card-body>
+    <nb-card-footer>
+        <div *ngIf="isDblBtn">
+            <button nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            <button nbButton hero status="primary" (click)="success()">Yes I'm sure</button>
+        </div>
+        <div *ngIf="!isDblBtn">
+            <button nbButton hero status="primary" (click)="dismiss()">OK</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>
+  

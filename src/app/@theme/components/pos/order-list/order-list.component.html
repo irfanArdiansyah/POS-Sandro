@@ -1,0 +1,109 @@
+<nb-card>
+    <nb-card-header>
+        <h4>Order List</h4>
+    </nb-card-header>
+    <nb-card-body>
+        <nb-list>
+            <nb-list-item *ngFor="let item of getProduct()" class="d-flex justify-content-between">
+                <nb-user size="large" [title]="item.unitPrice" [name]="item.productName" [picture]="item.productImage.url">
+                </nb-user>
+                <div>
+                    <button class="mr-1 ml-1" nbButton ghost (click)="decreaseQty(item)"><nb-icon icon="minus-circle-outline"></nb-icon></button>
+                        {{item.quantity||0}}
+                    <button class="mr-1" nbButton ghost (click)="increaseQty(item)"><nb-icon icon="plus-circle-outline"></nb-icon></button>
+                    <button class="mr-1" nbButton ghost status="danger" (click)="item.selected = !item.selected"><nb-icon icon="trash-2-outline"></nb-icon></button>
+                </div>
+            </nb-list-item>
+          </nb-list>
+          <div class="row">
+            <div class="col">
+                <div class="d-flex flex-column">
+                    <nb-select-label>Order Tax</nb-select-label>
+                    <nb-select [(selected)]="data.taxAmount">
+                        <nb-option value="5">5%</nb-option>
+                        <nb-option value="10">10%</nb-option>
+                        <nb-option value="15">15%</nb-option>
+                        <nb-option value="20">20%</nb-option>
+                        <nb-option value="25">25%</nb-option>
+                        <nb-option value="30">30%</nb-option>
+                    </nb-select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column">
+                    <nb-select-label>Discount</nb-select-label>
+                    <nb-select [(selected)]="data.discountAmount">
+                        <nb-option value="5">5%</nb-option>
+                        <nb-option value="10">10%</nb-option>
+                        <nb-option value="15">15%</nb-option>
+                        <nb-option value="20">20%</nb-option>
+                        <nb-option value="25">25%</nb-option>
+                        <nb-option value="30">30%</nb-option>
+                    </nb-select>
+                </div>
+            </div>
+          </div>
+
+          <div class="bg-light p-4 mt-4">
+            <div class="row mb-2">
+                    <div class="col-6">Sub Total</div>
+                    <div class="col-6">{{getSubTotalWithoutTax()}}</div>
+            </div>
+            <div class="row mb-2">
+                    <div class="col-6">Tax (GST {{data.taxAmount||5}}% )</div>
+                    <div class="col-6">{{getTax()}}</div>
+            </div>
+            <div class="row mb-2">
+                    <div class="col-6">Sub Total</div>
+                    <div class="col-6">{{getSubTotalWithTax()||0}}</div>
+            </div>
+            <div class="row">
+                    <div class="col-6">Discount ({{data.discountAmount||5}}%)</div>
+                    <div class="col-6">{{getDiscount() || 0}}</div>
+            </div>
+            <div class="row mt-4">
+                    <div class="col-6">Total</div>
+                    <div class="col-6">{{getGrandTotal()}}</div>
+            </div>
+          </div>
+
+          <div class="mt-4 mb-4">
+              <h5 style="font-size: 14px;">Payment Method</h5>
+              <div class="row">
+                <div class="col">
+                    <button class="mr-1 w-100" nbButton (click)="data.paymentMethod = 'Cash'" [status]="data.paymentMethod == 'Cash' ?'success':'basic'">Cash</button>
+                </div>
+                <div class="col">
+                    <button class="mr-1 w-100" nbButton (click)="data.paymentMethod = 'Debit Card'" [status]="data.paymentMethod == 'Debit Card' ?'success':'basic'">Debit</button>
+                </div>
+                <div class="col">
+                    <button class="mr-1 w-100" nbButton (click)="data.paymentMethod = 'Scan'" [status]="data.paymentMethod == 'Scan'?'success':'basic'">Scan</button>
+                </div>
+              </div>
+          </div>
+
+          <div class="row">
+            <nb-card-header class="bg-">
+               Grand Total {{getGrandTotal()}}
+            </nb-card-header>
+          </div>
+
+          <div class="row mt-4">
+                <div class="col">
+                    <button nbButton class="mr-1 w-100" status="primary" (click)="result.emit('Hold')">Hold</button>
+                </div>
+                <div class="col">
+                    <button nbButton class="mr-1 w-100" status="danger" (click)="result.emit('Delete')">Delete</button>
+                </div>
+                <div class="col">
+                    <button nbButton class="mr-1 w-100" status="success" (click)="result.emit('Payment')">Payment</button>
+                </div>
+          </div>
+          
+    </nb-card-body>
+    <nb-card-footer class="d-flex justify-content-between">
+       
+        
+        
+    </nb-card-footer>
+</nb-card>
