@@ -23,6 +23,12 @@ export class ProfileService {
     return this.db.object('users/' + profile.key).set(profile)
   }
 
+  push(data:any){
+    data.barcodeType = 'user'
+    return this.db.list('users/').push(data)
+  }
+
+
   getbyId(userId: string): Observable<any> {
     return this.db.object('users/' + userId).valueChanges()
   }

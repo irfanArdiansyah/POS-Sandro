@@ -8,6 +8,7 @@ import { PopupNotifService } from '../../services/notifications/popup-notif.serv
 import { ProductService } from '../../services/product/product.service';
 import { SalesService } from '../../services/sales/sales.service';
 import * as moment from 'moment';
+import { ProfileService } from '../../services/profile/profile.service';
 
 @Component({
   selector: 'ngx-pos',
@@ -25,6 +26,9 @@ export class PosComponent implements OnDestroy {
   products: any;
   data;
   timeout: NodeJS.Timeout;
+  completedInvoicesRef: any;
+  completedInvoices: any;
+  sale: any;
 
   constructor(
     private _sales: SalesService,
@@ -32,6 +36,7 @@ export class PosComponent implements OnDestroy {
     private popup: PopupNotifService,
     private _invoices: InvoicesService,
     private _products: ProductService,
+    private _profile:ProfileService,
     private countServ: CountsService
   ) {
     this.subcription.push(this.getCurrentUser())
@@ -44,21 +49,35 @@ export class PosComponent implements OnDestroy {
     this.subcription.forEach(x => x.unsubscribe())
   }
 
+  refresh(){
+    this.subcription.forEach(x => x.unsubscribe())
+    this.subcription.push(this.getCurrentUser())
+    this.subcription.push(this.getSales())
+    this.subcription.push(this.getProducts())
+    this.subcription.push(this.getInvoices())
+    this.completedInvoicesRef = null
+  }
+
   private getCurrentUser() {
     return this.auth.getUserProfile()
       .subscribe((token: NbAuthJWTToken) => {
         if (token) {
           this.userProfile = token.getPayload();
-          this.data = {
-            saleDate: moment().format("MMM DD, YYYY, hh:mm a"),
-            cashierId: this.userProfile.user_id,
-            totalAmount: '',
-            paymentMethod: '',
-            taxAmount: '5',
-            discountAmount: '5',
-            netAmount: '',
-            status: '',
-          }
+          this._profile.getbyId(this.userProfile.user_id).subscribe((res) => {
+            if (res) {
+              this.data = {
+                saleDate: moment().format("MMM DD, YYYY, hh:mm a"),
+                cashierId: this.userProfile.user_id,
+                cashierName: res.firstName,
+                totalAmount: '',
+                paymentMethod: 'Cash',
+                taxAmount: '5',
+                discountAmount: '5',
+                netAmount: '',
+                status: '',
+              };
+            }
+          })
         }
 
       });
@@ -99,6 +118,9 @@ export class PosComponent implements OnDestroy {
       case "Payment":
         const selectedProduct = this.products.filter(x => x.selected)
         const invoices = this.data
+        if(invoices.totalAmount == 0){
+          return this.popup.errorData("Please select product before continue.", 'popup')
+        }
         invoices.status = 'Completed'
         let res: any = await this._invoices.push(invoices).catch(x => {
           return this.responds = this.popup.errorData(`Terjadi kesalahan mohon coba beberapa saat lagi!`); this.loading = false;
@@ -107,9 +129,9 @@ export class PosComponent implements OnDestroy {
           this.loading = false
           // let param2: any = { totalUser: this.totalUser + 1 }
           // this.countServ.update(param2)
+          this.completedInvoicesRef = res
           this.responds = this.popup.succesData("Data berhasil ditambahkan!", 4000)
           this.handleRespondsTime(3000);
-          this.subcription.push(this.getInvoices())
           selectedProduct.forEach(async product => {
             await this.createSales(res.key, product)
           });
@@ -118,17 +140,42 @@ export class PosComponent implements OnDestroy {
           this.handleRespondsTime(3000);
         }
 
+        let dialogRef = this.popup.showCustomPopup("Payment Completed", 'Do you want to Print Receipt for the Completed Order?', 'checkmark-circle-outline', 'pos', 'success')
+        dialogRef.onClose.subscribe(res => {
+          if(res?.res){
+            if(res.type == 'print'){
+              this.subcription.push(this.getInvoice())
+              this.subcription.push(this.getSaleByInvoice())
+              // this.refresh()
+            }else{
+              this.refresh()
+            }
+          }
+        })
+
         break;
       case "Hold":
 
         break;
       case "Delete":
-
+        this.refresh()
         break;
 
       default:
         break;
     }
+  }
+
+  getInvoice() {
+    return this._invoices.getbyId(this.completedInvoicesRef.key).subscribe(res => {
+      this.completedInvoices = res
+    })
+  }
+
+  getSaleByInvoice(){
+    return this._sales.getbyIdInvoices(this.completedInvoicesRef.key).subscribe(res => {
+      this.sale = res
+    })
   }
 
   async createSales(receiptNumber, product) {

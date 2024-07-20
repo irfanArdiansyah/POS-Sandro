@@ -12,6 +12,8 @@ export class DialogComponent {
   @Input() message;
   @Input() isDblBtn;
   @Input() icon;
+  @Input() custom;
+  @Input() status;
   
 
 
@@ -22,7 +24,10 @@ export class DialogComponent {
     this.ref.close();
   }
 
-  success() {
+  success(type) {
+    if(type){
+      return this.ref.close({res:true, type:type});
+    }
     this.ref.close(true);
   }
 

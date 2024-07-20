@@ -11,17 +11,28 @@
     <button mat-button (click)="onNoClick()">OK</button>
 </div> -->
 <nb-card>
-    <nb-card-header>{{ title }}</nb-card-header>
+    <nb-card-header>
+        <div *ngIf="icon" class="d-flex justify-content-center align-items-center mt-4">
+           <nb-icon style="width: 40px;height: 40px;" [icon]="icon" [status]="status"></nb-icon>
+        </div>
+        <h4 class="text-center mt-4">{{ title }}</h4>
+    </nb-card-header>
     <nb-card-body>
       {{message}}
     </nb-card-body>
     <nb-card-footer>
         <div *ngIf="isDblBtn">
-            <button nbButton hero status="danger" (click)="dismiss()">Cancel</button>
-            <button nbButton hero status="primary" (click)="success()">Yes I'm sure</button>
+            <div *ngIf="!custom" class="d-flex justify-content-between">
+                <button nbButton hero status="danger"  class="w-100" (click)="dismiss()">Cancel</button>
+                <button nbButton hero status="primary" class="w-100 ml-4"  (click)="success()">Yes I'm sure</button>
+            </div>
+            <div *ngIf="custom == 'pos'" class="d-flex justify-content-between">
+                <button nbButton hero status="warning" class="w-100" (click)="success('print')">Print Receipt</button>
+                <button nbButton hero status="primary" class="w-100 ml-4" (click)="success('next')">Next Order</button>
+            </div>
         </div>
-        <div *ngIf="!isDblBtn">
-            <button nbButton hero status="primary" (click)="dismiss()">OK</button>
+        <div *ngIf="!isDblBtn" class="d-flex justify-content-between">
+            <button nbButton hero status="primary" class="w-100" (click)="dismiss()">OK</button>
         </div>
     </nb-card-footer>
   </nb-card>

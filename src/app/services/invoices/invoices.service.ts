@@ -24,12 +24,12 @@ export class InvoicesService {
   }
 
   push(data:any){
-    data.barcodeType = 'product'
+    data.barcodeType = 'invoices'
     return this.db.list(this.url).push(data)
   }
 
   set(item: any) {
-    item.barcodeType = 'product'
+    item.barcodeType = 'invoices'
     return this.db.object(this.url).set(item)
   }
 

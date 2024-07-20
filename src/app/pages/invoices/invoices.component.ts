@@ -11,6 +11,8 @@ import { BtnStatusComponent } from '../../@theme/components/tables/btn-status/bt
 import { InvoicesService } from '../../services/invoices/invoices.service';
 import { DatepickerCustomComponent } from '../../@theme/components/tables/datepicker-custom/datepicker-custom.component';
 import { ProfileService } from '../../services/profile/profile.service';
+import { DisplayInputComponent } from '../../@theme/components/tables/display-input/display-input.component';
+import { CustomInputComponent } from '../../@theme/components/tables/custom-input/custom-input.component';
 
 @Component({
   selector: 'ngx-invoices',
@@ -30,7 +32,8 @@ export class InvoicesComponent {
   columns = {
     key: {
       title: 'Receipt Number',
-      type: 'number',
+      type: 'custom',
+      renderComponent:DisplayInputComponent,
       editable:false,
       addable:false,
       editor:{
@@ -48,12 +51,26 @@ export class InvoicesComponent {
     },
     cashierId: {
       title: 'Cashier Id',
-      type: 'string',
+      type: 'custom',
+      valuePrepareFunction:null,
+      renderComponent:DisplayInputComponent,
       editor:{
-        type:"list",
+        type:"custom",
+        component:CustomInputComponent,
         config:{
+          changedValues:['cashierName'],
           list:[]
         }
+      }
+    },
+    cashierName: {
+      title: 'Cashier Name',
+      type: 'text',
+      editable:false,
+      addable:false,
+      editor:{
+        editable:false,
+        addable:false
       }
     },
     totalAmount: {
@@ -162,8 +179,10 @@ export class InvoicesComponent {
   getCashier(): Subscription {
      return this._profile.getbyRole('cashier').subscribe(res => {
       this.cashiers = res
+      const valuePrepareFunction = this.cashiers
       const columns = {...this.columns}
       columns.cashierId.editor.config.list = this.cashiers.map(x=> {return {value:x.userKey, title:x.firstName}})
+      columns.cashierId.valuePrepareFunction = valuePrepareFunction
       this.columns = columns
      }, error => {
 

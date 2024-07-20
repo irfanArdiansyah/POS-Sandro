@@ -12,11 +12,17 @@ export class PopupNotifService {
     constructor(private toastrService: NbToastrService, private dialog:NbDialogService) {
 
     }
-    errorData(message: string) {
-        return this.showNotification('top', 'center', message, 'error_outline', 'danger')
+    errorData(message: string, type=null) {
+        if(type == 'popup')
+            this.showCustomPopup("Error", message, 'close-circle-outline', null, 'danger', false)
+        else
+            return this.showNotification('top', 'center', message, 'error_outline', 'danger')
     }
-    succesData(message: string, timer=2000) {
-       return this.showNotification('top', 'center', message, 'check_circle', 'success', timer)
+    succesData(message: string, timer=2000, type=null) {
+        if(type == 'popup')
+            this.showCustomPopup("Error", message, 'check_circle', null, 'success', false)
+        else
+            return this.showNotification('top', 'center', message, 'check_circle', 'success', timer)
     }
 
     infoData(message: string) {
@@ -30,6 +36,19 @@ export class PopupNotifService {
                    message: message, 
                    isDblBtn: true, 
                    icon: 'warning'
+                }
+            })
+    }
+
+    showCustomPopup(title, message = "no message", icon, custom, status, isDblBtn = true) {
+        return this.dialog.open(DialogComponent, {
+                context:{
+                   title: title, 
+                   message: message, 
+                   isDblBtn: isDblBtn, 
+                   icon: icon,
+                   custom:custom,
+                   status:status
                 }
             })
     }

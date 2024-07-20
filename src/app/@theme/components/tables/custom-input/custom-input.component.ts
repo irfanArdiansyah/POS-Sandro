@@ -23,6 +23,9 @@ export class CustomInputComponent extends DefaultEditor {
             }
             if(id == 'totalPrice')
               this.calculateTotalPrice(id, event, x);
+            if(id=='cashierName'){
+              x.newValue = data.firstName
+            }
           }
         })
        

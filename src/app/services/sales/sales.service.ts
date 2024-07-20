@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 export class SalesService {
 
   url = 'sales/'
+  urlw = 'sales'
   constructor(private db:AngularFireDatabase) { }
 
   get() {
@@ -21,6 +22,14 @@ export class SalesService {
 
   getbyId(Id: string): Observable<any> {
     return this.db.object(this.url + Id).valueChanges()
+  }
+
+  getbyIdInvoices(Id: string): Observable<any> {
+    return this.db.list(this.urlw, ref=>ref.orderByChild('receiptNumber').equalTo(Id)).snapshotChanges().pipe(
+      map((changes: any) =>
+        changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
+      )
+    );
   }
 
   push(data:any){

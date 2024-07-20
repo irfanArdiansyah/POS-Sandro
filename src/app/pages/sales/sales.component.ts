@@ -13,6 +13,7 @@ import { InvoicesService } from '../../services/invoices/invoices.service';
 import { ProductService } from '../../services/product/product.service';
 import { CustomInputComponent } from '../../@theme/components/tables/custom-input/custom-input.component';
 import { CustomTextInputComponent } from '../../@theme/components/tables/custom-text-input/custom-text-input.component';
+import { DisplayInputComponent } from '../../@theme/components/tables/display-input/display-input.component';
 
 @Component({
   selector: 'ngx-sales',
@@ -32,7 +33,8 @@ export class SalesComponent {
   columns = {
     key: {
       title: 'Sale Detail Id',
-      type: 'text',
+      type: 'custom',
+      renderComponent:DisplayInputComponent,
       editable:false,
       addable:false,
       editor:{
@@ -42,7 +44,8 @@ export class SalesComponent {
     },
     receiptNumber: {
       title: 'Receipt Number',
-      type: 'text',
+      type: 'custom',
+      renderComponent:DisplayInputComponent,
       editor:{
         type:"list",
         config:{
@@ -54,17 +57,28 @@ export class SalesComponent {
     },
     productId: {
       title: 'Product Id',
-      type: 'text',
+      type: 'custom',
       valuePrepareFunction:null,
+      renderComponent:DisplayInputComponent,
       editor:{
         type:"custom",
         component:CustomInputComponent,
         config:{
-          changedValues:['unitPrice', 'totalPrice'],
+          changedValues:['unitPrice', 'totalPrice', 'productName'],
           list:[
            
           ]
         }
+      }
+    },
+    productName: {
+      title: 'Product Name',
+      type: 'text',
+      editable:false,
+      addable:false,
+      editor:{
+        editable:false,
+        addable:false
       }
     },
     quantity: {

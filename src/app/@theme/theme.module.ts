@@ -60,6 +60,7 @@ import { FormsModule } from '@angular/forms';
 import { TopActionComponent } from './components/pos/top-action/top-action.component';
 import { ProductsComponent } from './components/pos/products/products.component';
 import { OrderListComponent } from './components/pos/order-list/order-list.component';
+import { DisplayInputComponent } from './components/tables/display-input/display-input.component';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -117,7 +118,7 @@ const PIPES = [
 @NgModule({
   imports: [CommonModule, FormsModule, ...NB_MODULES],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
-  declarations: [...COMPONENTS, ...PIPES],
+  declarations: [...COMPONENTS, ...PIPES, DisplayInputComponent],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {
