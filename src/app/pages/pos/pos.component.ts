@@ -9,6 +9,7 @@ import { ProductService } from '../../services/product/product.service';
 import { SalesService } from '../../services/sales/sales.service';
 import * as moment from 'moment';
 import { ProfileService } from '../../services/profile/profile.service';
+import { ExcelService } from '../../services/excel/excel.service';
 
 @Component({
   selector: 'ngx-pos',
@@ -37,7 +38,8 @@ export class PosComponent implements OnDestroy {
     private _invoices: InvoicesService,
     private _products: ProductService,
     private _profile:ProfileService,
-    private countServ: CountsService
+    private countServ: CountsService,
+    public excelServ:ExcelService
   ) {
     this.subcription.push(this.getCurrentUser())
     this.subcription.push(this.getSales())
@@ -71,8 +73,8 @@ export class PosComponent implements OnDestroy {
                 cashierName: res.firstName,
                 totalAmount: '',
                 paymentMethod: 'Cash',
-                taxAmount: '5',
-                discountAmount: '5',
+                taxAmount: '0',
+                discountAmount: '0',
                 netAmount: '',
                 status: '',
               };
@@ -116,6 +118,7 @@ export class PosComponent implements OnDestroy {
   async onCompleted(type) {
     switch (type) {
       case "Payment":
+        debugger
         const selectedProduct = this.products.filter(x => x.selected)
         const invoices = this.data
         if(invoices.totalAmount == 0){
@@ -132,20 +135,21 @@ export class PosComponent implements OnDestroy {
           this.completedInvoicesRef = res
           this.responds = this.popup.succesData("Data berhasil ditambahkan!", 4000)
           this.handleRespondsTime(3000);
-          selectedProduct.forEach(async product => {
-            await this.createSales(res.key, product)
-          });
         } else {
           this.responds = this.popup.errorData(`Terjadi kesalahan mohon coba beberapa saat lagi!`); this.loading = false;
           this.handleRespondsTime(3000);
         }
-
+        
         let dialogRef = this.popup.showCustomPopup("Payment Completed", 'Do you want to Print Receipt for the Completed Order?', 'checkmark-circle-outline', 'pos', 'success')
         dialogRef.onClose.subscribe(res => {
           if(res?.res){
             if(res.type == 'print'){
               this.subcription.push(this.getInvoice())
               this.subcription.push(this.getSaleByInvoice())
+              this.excelServ.exportToPDF("Invoice_#"+this.completedInvoicesRef.key.substr(this.completedInvoicesRef.key.length-5))
+              selectedProduct.forEach(async product => {
+                await this.createSales(this.completedInvoicesRef.key, product)
+              });
               // this.refresh()
             }else{
               this.refresh()

@@ -3,6 +3,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableData } from '../../../../@core/data/smart-table';
 import { AttachmentService } from '../../../../services/attachment/attachment.service';
 import * as moment from 'moment';
+import { ExcelService } from '../../../../services/excel/excel.service';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class SmartTableComponent implements OnChanges {
   constructor(
     private service: SmartTableData,
     private attachmentServ:AttachmentService,
+    public excelServ:ExcelService
 
   ) {
     if (this.columns) {
@@ -131,6 +133,47 @@ export class SmartTableComponent implements OnChanges {
 
   downloadReport(){
     this.attachmentServ.downloadExcel(this.source.data, "Data " + this.title + moment().format("_DD_MM_YYYY_hh_mm_ss"))
+  }
+
+
+  downloadReportPDF(){
+    let param = this.source.data.map(x => {
+      let arr:any = Object.keys(this.columns)
+      let fields = {}
+      arr.filter(y=>{
+        fields[y] = x[y]
+      })
+      return fields
+    })
+    this.getReportPDFReady(param);
+    setTimeout(() => {
+      this.excelServ.downloadReport(this.source.data, "Data " + this.title + moment().format("_DD_MM_YYYY_hh_mm_ss"))
+    }, 1000);
+  }
+
+  private getReportPDFReady(param: any) {
+    this.excelServ.trs = []
+    this.excelServ.ths = []
+    param.forEach((item, index) => {
+      let tds = [];
+      let newths = [];
+      if (index == 0)
+        Object.keys(param[index]).forEach((key, index) => {
+          this.excelServ.ths.push(key);
+          newths.push(key);
+        }, param);
+      if (index > 0)
+        Object.keys(param[index]).forEach((key, index) => {
+          newths.push(key);
+        }, param);
+
+      if (newths.length > this.excelServ.ths.length) { this.excelServ.ths = newths; }
+      Object.values(param[index]).forEach((key, index) => {
+        tds.push(key);
+      }, param);
+      this.excelServ.trs.push(tds);
+    }); 
+    
   }
 
 }

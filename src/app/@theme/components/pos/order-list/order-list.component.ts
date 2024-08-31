@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import * as moment from 'moment';
+import { ExcelService } from '../../../../services/excel/excel.service';
 @Component({
   selector: 'ngx-order-list',
   templateUrl: './order-list.component.html',
@@ -9,6 +10,10 @@ export class OrderListComponent {
   @Input() data;
   @Input() products;
   @Output() result = new EventEmitter<any>();
+
+  constructor(public excelServ:ExcelService){
+
+  }
 
 
   getProduct() {
@@ -91,5 +96,9 @@ export class OrderListComponent {
   //   }
 
   // }
+
+  async onTestPdf(){
+    await this.excelServ.exportToPDF('POS_PDF_test')
+  }
 
 }

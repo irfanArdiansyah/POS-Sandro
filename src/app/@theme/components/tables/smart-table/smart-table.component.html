@@ -5,7 +5,8 @@
         {{title}}
       </div>
       <div class="col-xxl-6">
-        <button nbButton class="float-right" (click)="downloadReport()"><nb-icon icon="download-outline"></nb-icon>Download Report</button>
+        <button nbButton class="float-right" (click)="downloadReport()"><nb-icon icon="download-outline"></nb-icon>Download Report Excel</button>
+        <button nbButton class="float-right mr-4" (click)="downloadReportPDF()"><nb-icon icon="download-outline"></nb-icon>Download Report PDF</button>
       </div>
     </div>
   </nb-card-header>
@@ -20,3 +21,28 @@
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
+
+<div class="print-wrapper" id="print-wrapper">
+  <img width="60"
+    src="/assets/images/logo-pos-sandro.jpeg"
+    alt="picture">
+  <ul style="list-style: none;" *ngIf="excelServ.desc.length > 0">
+    <li style="list-style: none;" *ngFor="let item of excelServ.desc">{{item.title}}: {{item.value}}</li>
+  </ul>
+  <table id="report" style=" font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;">
+    <tr>
+      <th *ngFor="let item of excelServ.ths" style=" padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white; border: 1px solid #ddd;
+  padding: 8px;">{{item}}</th>
+    </tr>
+    <tr *ngFor="let tr of excelServ.trs">
+      <td *ngFor="let item of tr" style=" border: 1px solid #ddd;
+  padding: 8px;">{{item}}</td>
+    </tr>
+  </table>
+</div>

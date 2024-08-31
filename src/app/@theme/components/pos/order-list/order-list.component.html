@@ -20,7 +20,7 @@
                 <div class="d-flex flex-column">
                     <nb-select-label>Order Tax</nb-select-label>
                     <nb-select [(selected)]="data.taxAmount">
-                        <nb-option value="5">5%</nb-option>
+                        <nb-option value="0">No Tax</nb-option>
                         <nb-option value="10">10%</nb-option>
                         <nb-option value="15">15%</nb-option>
                         <nb-option value="20">20%</nb-option>
@@ -33,6 +33,7 @@
                 <div class="d-flex flex-column">
                     <nb-select-label>Discount</nb-select-label>
                     <nb-select [(selected)]="data.discountAmount">
+                        <nb-option value="0">No Discount</nb-option>
                         <nb-option value="5">5%</nb-option>
                         <nb-option value="10">10%</nb-option>
                         <nb-option value="15">15%</nb-option>
@@ -98,8 +99,63 @@
                 <div class="col">
                     <button nbButton class="mr-1 w-100" status="success" (click)="result.emit('Payment')">Payment</button>
                 </div>
+                <!-- <div class="col">
+                    <button nbButton class="mr-1 w-100" status="success" (click)="onTestPdf()">Test PDF</button>
+                </div> -->
           </div>
           
+    </nb-card-body>
+    <nb-card-footer class="d-flex justify-content-between">
+       
+        
+        
+    </nb-card-footer>
+</nb-card>
+
+<nb-card *ngIf="data" #printWrapper id="printWrapper" class="print-wrapper">
+    <nb-card-header>
+        <div class="mb-3 w-100 d-flex">
+            <img  width="80" src="./assets/images/logo-pos-sandro.jpeg" alt="logo">
+        </div>
+        <h4>Order List</h4>
+    </nb-card-header>
+    <nb-card-body>
+        <nb-list>
+            <nb-list-item *ngFor="let item of getProduct()" class="d-flex justify-content-between">
+                <nb-user size="large" [title]="item.unitPrice" [name]="item.productName" [picture]="item.productImage.url">
+                </nb-user>
+            </nb-list-item>
+          </nb-list>
+
+          <div class="bg-light p-4 mt-4">
+            <div class="row mb-2">
+                    <div class="col-6">Sub Total</div>
+                    <div class="col-6">{{getSubTotalWithoutTax()}}</div>
+            </div>
+            <div class="row mb-2">
+                    <div class="col-6">Tax (GST {{data.taxAmount||5}}% )</div>
+                    <div class="col-6">{{getTax()}}</div>
+            </div>
+            <div class="row mb-2">
+                    <div class="col-6">Sub Total</div>
+                    <div class="col-6">{{getSubTotalWithTax()||0}}</div>
+            </div>
+            <div class="row">
+                    <div class="col-6">Discount ({{data.discountAmount||5}}%)</div>
+                    <div class="col-6">{{getDiscount() || 0}}</div>
+            </div>
+            <div class="row mt-4">
+                    <div class="col-6">Total</div>
+                    <div class="col-6">{{getGrandTotal()}}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <nb-card-header class="bg-">
+               Grand Total {{getGrandTotal()}}
+            </nb-card-header>
+          </div>
+
     </nb-card-body>
     <nb-card-footer class="d-flex justify-content-between">
        
