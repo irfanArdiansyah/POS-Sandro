@@ -2,7 +2,7 @@
   <div class="col-xxl-12">
     <nb-card>
       <nb-card-body>
-        <h2>Hi Sales, </h2>
+        <h2>Hi Sales, {{firstName}} </h2>
       </nb-card-body>
     </nb-card>
   </div>
@@ -15,7 +15,7 @@
         Weekly Earnings
       </nb-card-header>
       <nb-card-body>
-        <h3>Rp.100.000.00</h3>
+        <h3>{{totalSalesAmount|currency:'':'Rp.'}}</h3>
       </nb-card-body>
       <nb-card-footer>48% increase compare to last week</nb-card-footer>
     </nb-card>
@@ -24,7 +24,7 @@
     <nb-card accent="info">
       <nb-card-header>No of Total Sales</nb-card-header>
       <nb-card-body>
-       <h3>10.000</h3>
+       <h3>{{totalSales}}</h3>
       </nb-card-body>
       <nb-card-footer>48% increase compare to last week</nb-card-footer>
     </nb-card>
@@ -35,41 +35,13 @@
 
 <div class="row">
   <div class="col-xxl-5">
-    <ngx-traffic-reveal-card></ngx-traffic-reveal-card>
+    <ngx-traffic-reveal-card [products]="products"></ngx-traffic-reveal-card>
 
     <div class="row">
-      <!-- <div class="col-md-6">
-        <ngx-profit-card></ngx-profit-card>
-      </div>
-      <div class="col-md-6">
-        <ngx-earning-card></ngx-earning-card>
-      </div> -->
+    
     </div>
 
    
   </div>
-
-  <div class="col-xxl-7">
-    <ngx-ecommerce-charts></ngx-ecommerce-charts>
-  </div>
 </div>
-<!-- 
-<div class="row">
-  <div class="col-xxl-9">
-    <ngx-country-orders></ngx-country-orders>
-  </div>
 
-  <div class="col-xxl-3">
-    <ngx-progress-section></ngx-progress-section>
-  </div>
-</div> -->
-
-<!-- <div class="row">
-  <div class="col-xxl-9">
-    <ngx-ecommerce-visitors-analytics></ngx-ecommerce-visitors-analytics>
-  </div>
-
-  <div class="col-xxl-3">
-    <ngx-user-activity></ngx-user-activity>
-  </div>
-</div> -->

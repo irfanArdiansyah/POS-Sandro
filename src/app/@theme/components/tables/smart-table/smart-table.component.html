@@ -23,9 +23,12 @@
 </nb-card>
 
 <div class="print-wrapper" id="print-wrapper">
-  <img width="60"
-    src="/assets/images/logo-pos-sandro.jpeg"
-    alt="picture">
+  <div class="d-flex align-items-center mb-4">
+    <img width="60" class="mr-4"
+      src="/assets/images/logo-pos-sandro.jpeg"
+      alt="picture">
+    <h3>{{excelServ.title}} Report</h3>
+  </div>
   <ul style="list-style: none;" *ngIf="excelServ.desc.length > 0">
     <li style="list-style: none;" *ngFor="let item of excelServ.desc">{{item.title}}: {{item.value}}</li>
   </ul>

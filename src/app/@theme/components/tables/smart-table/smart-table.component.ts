@@ -154,22 +154,42 @@ export class SmartTableComponent implements OnChanges {
   private getReportPDFReady(param: any) {
     this.excelServ.trs = []
     this.excelServ.ths = []
+    this.excelServ.title = this.title
     param.forEach((item, index) => {
       let tds = [];
       let newths = [];
-      if (index == 0)
-        Object.keys(param[index]).forEach((key, index) => {
-          this.excelServ.ths.push(key);
-          newths.push(key);
-        }, param);
-      if (index > 0)
-        Object.keys(param[index]).forEach((key, index) => {
-          newths.push(key);
-        }, param);
+      let customThs = []
+      if(this.title ==  'Invoices Table')
+        customThs = ['key', 'saleDate', 'cashierName', 'paymentMethod', 'netAmount', 'status']
+      else if(this.title == 'Product Table')
+        customThs = ['productName', 'quantityPerUnit', 'unitPrice', 'unitInStock', 'taxRate', 'discount', 'status']
+      else{
+        if (index == 0)
+          Object.keys(param[index]).forEach((key, index) => {
+            this.excelServ.ths.push(key);
+            newths.push(key);
+          }, param);
+        if (index > 0)
+          Object.keys(param[index]).forEach((key, index) => {
+            newths.push(key);
+          }, param);
+      }
+      
+      if(customThs.length > 0)
+        newths = customThs
 
       if (newths.length > this.excelServ.ths.length) { this.excelServ.ths = newths; }
-      Object.values(param[index]).forEach((key, index) => {
-        tds.push(key);
+      newths.forEach((key, index) => {
+        let value:any= item[key]
+        if(value?.length == 20 && value?.includes("-"))
+          value = "#"+value.substring(value.length, value.length - 6)
+        else if(value?.length == 28){
+          value = "#"+value.substring(value.length, value.length - 6)
+        }
+        else if(value?.length > 20){
+          value = value.substring(value.length, value.length - 6) + '...'
+        }
+        tds.push(value);
       }, param);
       this.excelServ.trs.push(tds);
     }); 

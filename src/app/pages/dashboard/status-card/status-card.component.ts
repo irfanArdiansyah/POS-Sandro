@@ -12,7 +12,8 @@ import { Component, Input } from '@angular/core';
       </div>
 
       <div class="details">
-        <div class="title h5"> {{ total }}</div>
+      <div *ngIf="totalType == 'number'" class="title h5"> {{ total | currency:'':'Rp.' }}</div>
+      <div *ngIf="totalType == 'text'" class="title h5"> {{ total }}</div>
         <div class="status paragraph-2">{{ title }}</div>
       </div>
     </nb-card>
@@ -23,5 +24,7 @@ export class StatusCardComponent {
   @Input() title: string;
   @Input() type: string;
   @Input() total: string;
+  @Input() totalType: string;
+  
   
 }

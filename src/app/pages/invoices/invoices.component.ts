@@ -153,7 +153,7 @@ export class InvoicesComponent {
         config:{
           list:[
             {value:'Pending', title:"Pending"},
-            {value:'Refunded', title:"Refunded"},
+            {value:'Canceled', title:"Canceled"},
             {value:'Completed', title:"Completed"},
           ]
         }

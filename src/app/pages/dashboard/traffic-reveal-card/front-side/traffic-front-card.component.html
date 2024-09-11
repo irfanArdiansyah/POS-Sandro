@@ -2,8 +2,7 @@
   <nb-list-item class="item" *ngFor="let item of frontCardData; trackBy: trackByDate">
     <span>{{ item.date }}</span>
     <span class="delta" [class.up]="item.delta.up" [class.down]="!item.delta.up">
-      <nb-icon [icon]="item.delta.up ? 'arrow-up' : 'arrow-down'" pack="eva"></nb-icon>
-      {{ item.delta.value }}%
+      {{ item.delta.value }}
     </span>
     <span>{{ item.value|currency:'':'Rp.' }}</span>
   </nb-list-item>

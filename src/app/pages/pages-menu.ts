@@ -7,11 +7,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/admin-dashboard',
     home: true,
   },
-  {
-    title: 'Sales Dashboard',
-    icon: 'shopping-cart-outline',
-    link: '/pages/sales-dashboard',
-  },
+  // {
+  //   title: 'Sales Dashboard',
+  //   icon: 'shopping-cart-outline',
+  //   link: '/pages/sales-dashboard',
+  // },
   {
     title: 'Inventory',
     group: true,

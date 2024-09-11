@@ -11,6 +11,7 @@ export class ExcelService {
   ths: any = []
   trs: any = []
   desc: any = []
+  title:string = ""
   constructor() { }
 
   async exportToPDF(filename) {
@@ -98,6 +99,17 @@ export class ExcelService {
 
       pdf.save(filename + '.pdf');
     });
+
+    // html2canvas(DATA, { scale: 2 }).then((canvas) => {
+    //   const filename = name;
+    //   let fileWidth = 208;
+    //   let fileHeight = (canvas.height * fileWidth) / canvas.width;
+    //   const FILEURI = canvas.toDataURL('image/png');
+    //   let PDF = new jsPDF('p', 'mm', 'a4');
+    //   let position = 0;
+    //   PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+    //   PDF.save(filename + '.pdf');
+    // });
   }
 
 }

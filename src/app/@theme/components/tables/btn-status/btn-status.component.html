@@ -2,7 +2,8 @@
 value == 'Active'||value == 'Approved'||value == 'Completed'?'success':
 value == 'Deactivated'?'basic':
 value == 'Pending'?'warning':
-value == 'Rejected'?'danger':'basic'
+value == 'Rejected'?'danger':
+value == 'Canceled'?'info':'basic'
 ">
     {{value||"Not Set"}}
 </button>

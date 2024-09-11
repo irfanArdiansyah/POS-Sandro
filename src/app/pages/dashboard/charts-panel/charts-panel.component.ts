@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 
 import { OrdersChartComponent } from './charts/orders-chart.component';
@@ -21,6 +21,7 @@ export class ECommerceChartsPanelComponent implements OnDestroy {
   ordersChartData: OrdersChart;
   profitChartData: ProfitChart;
 
+  @Input() invoices = []
   @ViewChild('ordersChart', { static: true }) ordersChart: OrdersChartComponent;
   @ViewChild('profitChart', { static: true }) profitChart: ProfitChartComponent;
 
@@ -56,6 +57,67 @@ export class ECommerceChartsPanelComponent implements OnDestroy {
     this.ordersProfitChartService.getOrdersChartData(period)
       .pipe(takeWhile(() => this.alive))
       .subscribe(ordersChartData => {
+        console.log(ordersChartData)
+       let data = {
+          chartLabel: [
+              "Mon",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Tue",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Wed",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Thu",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Fri",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Sat",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Sun",
+              "",
+              "",
+              "",
+              "",
+              ""
+          ],
+          linesData: [
+              // payments
+              [
+                 this.invoices.filter(x=>x.status == 'Completed').length
+              ],
+              // canceled
+              [
+                this.invoices.filter(x=>x.status == 'Canceled').length
+              ],
+              // all orders
+              [
+                this.invoices.length
+              ]
+          ]
+      }
         this.ordersChartData = ordersChartData;
       });
   }
