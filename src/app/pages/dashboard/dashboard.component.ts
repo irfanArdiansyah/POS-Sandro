@@ -163,6 +163,7 @@ export class DashboardComponent implements OnDestroy {
   products: any;
   invoices: any;
   firstName
+  userProfile
 
   constructor(private themeService: NbThemeService,
     private solarService: SolarData,
@@ -175,6 +176,7 @@ export class DashboardComponent implements OnDestroy {
     this.subscription.push(this.getProduct())
     this.subscription.push(this.getInvoice())
     this.subscription.push(this.getCashier())
+    this.subscription.push(this.getProfileById())
     // this.subscription.push(this.getSupplier())
     // this.subscription.push(this.getCustomer())
     this.themeService.getJsTheme()
@@ -183,6 +185,12 @@ export class DashboardComponent implements OnDestroy {
         this.statusCards = this.statusCardsByThemes[theme.name];
         this.statusCards2 = this.statusCardsByThemes2[theme.name]
       });
+  }
+
+  private getProfileById() {
+    return this.userService.getbyId(this.userProfile.user_id).subscribe(res => {
+      this.firstName = res.firstName
+    });
   }
 
   getCashier(): Subscription {
