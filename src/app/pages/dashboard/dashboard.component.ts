@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs';
 import { ProductService } from '../../services/product/product.service';
 import { InvoicesService } from '../../services/invoices/invoices.service';
 import { ProfileService } from '../../services/profile/profile.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { NbAuthJWTToken } from '@nebular/auth';
 
 interface CardSettings {
   title: string;
@@ -171,14 +173,14 @@ export class DashboardComponent implements OnDestroy {
     private productService:ProductService,
     private invoiceService:InvoicesService,
     private userService:ProfileService,
+    private authService:AuthService,
   ) {
+    this.subscription.push(this.getCurrentUser())
     this.subscription.push(this.getSales())
     this.subscription.push(this.getProduct())
     this.subscription.push(this.getInvoice())
     this.subscription.push(this.getCashier())
     this.subscription.push(this.getProfileById())
-    // this.subscription.push(this.getSupplier())
-    // this.subscription.push(this.getCustomer())
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
@@ -191,6 +193,16 @@ export class DashboardComponent implements OnDestroy {
     return this.userService.getbyId(this.userProfile.user_id).subscribe(res => {
       this.firstName = res.firstName
     });
+  }
+
+  private getCurrentUser() {
+    return this.authService.getUserProfile()
+      .subscribe((token: NbAuthJWTToken) => {
+        if (token) {
+          this.userProfile = token.getPayload();
+        }
+
+      });
   }
 
   getCashier(): Subscription {
