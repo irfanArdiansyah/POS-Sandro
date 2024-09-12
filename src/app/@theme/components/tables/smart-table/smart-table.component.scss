@@ -11,3 +11,11 @@
   width: 35%;
   top: 10000000px;
 }
+
+@media (max-width:1400px) {
+  .print-wrapper{
+    position: fixed;
+    width: 75%;
+    top: 10000000px;
+  }
+}

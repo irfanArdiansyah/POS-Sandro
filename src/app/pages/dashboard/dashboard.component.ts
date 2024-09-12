@@ -162,6 +162,7 @@ export class DashboardComponent implements OnDestroy {
     subscription:Subscription[] = []
   products: any;
   invoices: any;
+  firstName
 
   constructor(private themeService: NbThemeService,
     private solarService: SolarData,
@@ -182,9 +183,6 @@ export class DashboardComponent implements OnDestroy {
         this.statusCards = this.statusCardsByThemes[theme.name];
         this.statusCards2 = this.statusCardsByThemes2[theme.name]
       });
-
-     
-      
   }
 
   getCashier(): Subscription {
