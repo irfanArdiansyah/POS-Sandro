@@ -61,6 +61,7 @@ import { TopActionComponent } from './components/pos/top-action/top-action.compo
 import { ProductsComponent } from './components/pos/products/products.component';
 import { OrderListComponent } from './components/pos/order-list/order-list.component';
 import { DisplayInputComponent } from './components/tables/display-input/display-input.component';
+import { SafeUrlModule } from '../pipe/safe-url.module';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -116,7 +117,7 @@ const PIPES = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ...NB_MODULES],
+  imports: [CommonModule, SafeUrlModule, FormsModule, ...NB_MODULES],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES, DisplayInputComponent],
 })

@@ -31,6 +31,7 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { NbFirebaseAuthModule } from '@nebular/firebase-auth';
 import { AngularFireModule } from '@angular/fire/compat';
+import { SafeUrlModule } from './pipe/safe-url.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -60,6 +61,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     provideStorage(() => getStorage()),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
+    SafeUrlModule
     
   ],
   bootstrap: [AppComponent],

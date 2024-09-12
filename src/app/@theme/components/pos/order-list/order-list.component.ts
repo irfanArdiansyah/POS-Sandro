@@ -12,7 +12,7 @@ export class OrderListComponent {
   @Output() result = new EventEmitter<any>();
 
   constructor(public excelServ:ExcelService){
-
+    
   }
 
 

@@ -122,7 +122,7 @@
     <nb-card-body>
         <nb-list>
             <nb-list-item *ngFor="let item of getProduct()" class="d-flex justify-content-between">
-                <nb-user size="large" [title]="item.unitPrice" [name]="item.productName" [picture]="item.productImage.url">
+                <nb-user size="large" [title]="item.unitPrice" [name]="item.productName">
                 </nb-user>
             </nb-list-item>
           </nb-list>

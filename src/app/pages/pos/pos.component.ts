@@ -118,7 +118,6 @@ export class PosComponent implements OnDestroy {
   async onCompleted(type) {
     switch (type) {
       case "Payment":
-        debugger
         const selectedProduct = this.products.filter(x => x.selected)
         const invoices = this.data
         if(invoices.totalAmount == 0){
@@ -189,6 +188,7 @@ export class PosComponent implements OnDestroy {
       productId:product.key,
       quantity:product.quantity,
       unitPrice:product.unitPrice,
+      productName:product.productName,
       totalPrice:Number(product.unitPrice) * Number(product.quantity),
     }
     let res: any = await this._sales.push(param).catch(x => {

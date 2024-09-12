@@ -20,6 +20,7 @@ export class ExcelService {
       let options = {
         fileName: filename,
         scale: 2,
+        useCORS: true
         // allowTaint:true
       };
       html2canvas(DATA, options).then((canvas) => {

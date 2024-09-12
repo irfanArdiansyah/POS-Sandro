@@ -26,28 +26,28 @@ export class DashboardComponent implements OnDestroy {
   private alive = true;
 
   solarValue: number;
-  briefcaseCard: CardSettings = {
+  totalProduct: CardSettings = {
     title: 'Total Product',
     iconClass: 'nb-e-commerce',
     type: 'primary',
     total: "100000",
     totalType:"text"
   };
-  moneyCard: CardSettings = {
+  totalSale: CardSettings = {
     title: 'Total Sales',
-    iconClass: 'nb-bar-chart',
+    iconClass: 'nb-compose',
     type: 'success',
     total: "100000",
     totalType:"text"
   };
-  profitCard: CardSettings = {
+  totalSaleAmount: CardSettings = {
     title: 'Total Sale Amount',
     iconClass: 'nb-arrow-thin-up',
     type: 'success',
     total: "100000",
     totalType:"number"
   };
-  expanseCard: CardSettings = {
+  totalInvoice: CardSettings = {
     title: 'Total Invoice',
     iconClass: 'nb-compose',
     type: 'warning',
@@ -55,30 +55,30 @@ export class DashboardComponent implements OnDestroy {
     totalType:"text"
   };
 
-  briefcaseCard2: CardSettings = {
+  totalCashier: CardSettings = {
     title: 'Cashier',
     iconClass: 'nb-person',
     type: 'primary',
     total: "0",
     totalType:"text"
   };
-  moneyCard2: CardSettings = {
-    title: 'Supplier',
-    iconClass: 'nb-person',
+  totalStock: CardSettings = {
+    title: 'Total Stock',
+    iconClass: 'nb-e-commerce',
     type: 'primary',
     total: "0",
     totalType:"text"
   };
-  profitCard2: CardSettings = {
-    title: 'Customer',
-    iconClass: 'nb-person',
+  totalInvoiceAmount: CardSettings = {
+    title: 'Total Invoice Amount',
+    iconClass: 'nb-bar-chart',
     type: 'warning',
     total: "0",
-    totalType:"text"
+    totalType:"number"
   };
-  expanseCard2: CardSettings = {
-    title: 'Total Invoice Amount',
-    iconClass: 'nb-compose',
+  totalInvoiceNetAmount: CardSettings = {
+    title: 'Total Invoice Net Amount',
+    iconClass: 'nb-bar-chart',
     type: 'warning',
     total: "0",
     totalType:"number"
@@ -88,17 +88,17 @@ export class DashboardComponent implements OnDestroy {
   statusCards2: string;
 
   salesOverviewCards: CardSettings[] = [
-    this.briefcaseCard,
-    this.moneyCard,
-    this.profitCard,
-    this.expanseCard,
+    this.totalProduct,
+    this.totalStock,
+    this.totalSale,
+    this.totalInvoice,
   ];
 
   usersOverviewCards: CardSettings[] = [
-    this.briefcaseCard2,
-    this.moneyCard2,
-    this.profitCard2,
-    this.expanseCard2,
+    this.totalCashier,
+    this.totalSaleAmount,
+    this.totalInvoiceAmount,
+    this.totalInvoiceNetAmount,
   ];
 
   statusCardsByThemes: {
@@ -111,19 +111,19 @@ export class DashboardComponent implements OnDestroy {
       cosmic: this.salesOverviewCards,
       corporate: [
         {
-          ...this.briefcaseCard,
+          ...this.totalProduct,
           type: 'warning',
         },
         {
-          ...this.moneyCard,
+          ...this.totalSale,
           type: 'primary',
         },
         {
-          ...this.profitCard,
+          ...this.totalSaleAmount,
           type: 'danger',
         },
         {
-          ...this.expanseCard,
+          ...this.totalInvoice,
           type: 'info',
         },
       ],
@@ -140,19 +140,19 @@ export class DashboardComponent implements OnDestroy {
       cosmic: this.usersOverviewCards,
       corporate: [
         {
-          ...this.briefcaseCard2,
+          ...this.totalCashier,
           type: 'warning',
         },
         {
-          ...this.moneyCard2,
+          ...this.totalStock,
           type: 'primary',
         },
         {
-          ...this.profitCard2,
+          ...this.totalInvoiceAmount,
           type: 'danger',
         },
         {
-          ...this.expanseCard2,
+          ...this.totalInvoiceNetAmount,
           type: 'info',
         },
       ],
@@ -174,8 +174,8 @@ export class DashboardComponent implements OnDestroy {
     this.subscription.push(this.getProduct())
     this.subscription.push(this.getInvoice())
     this.subscription.push(this.getCashier())
-    this.subscription.push(this.getSupplier())
-    this.subscription.push(this.getCustomer())
+    // this.subscription.push(this.getSupplier())
+    // this.subscription.push(this.getCustomer())
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
@@ -190,21 +190,21 @@ export class DashboardComponent implements OnDestroy {
   getCashier(): Subscription {
     return this.userService.getbyRole('cashier').subscribe(res=>{
       const total = res.length || 0
-      this.briefcaseCard2.total = total
+      this.totalCashier.total = total
     })
   }
 
   getSupplier(): Subscription {
     return this.userService.getbyRole('supplier').subscribe(res=>{
       const total = res.length || 0
-      this.moneyCard2.total = total
+      this.totalStock.total = total
     })
   }
   
   getCustomer(): Subscription {
     return this.userService.getbyRole('customer').subscribe(res=>{
       const total = res.length || 0
-      this.profitCard2.total = total
+      this.totalInvoiceAmount.total = total
     })
   }
   
@@ -212,10 +212,12 @@ export class DashboardComponent implements OnDestroy {
 
   getInvoice(): Subscription {
     return this.invoiceService.get().subscribe(res=>{
-      const totalInvoiceAmount = res.map(x => x.netAmount).reduce((a, b) => (a ? parseInt(a) : 0) + (b ? parseInt(b) : 0), 0);
+      const totalInvoiceAmount = res.map(x => x.totalAmount).reduce((a, b) => (a ? parseInt(a) : 0) + (b ? parseInt(b) : 0), 0);
+      const totalInvoiceNetAmount = res.map(x => x.netAmount).reduce((a, b) => (a ? parseInt(a) : 0) + (b ? parseInt(b) : 0), 0);
       const total = res.length||0
-      this.expanseCard.total = total
-      this.expanseCard2.total = totalInvoiceAmount
+      this.totalInvoice.total = total
+      this.totalInvoiceAmount.total = totalInvoiceAmount
+      this.totalInvoiceNetAmount.total = totalInvoiceNetAmount
       this.invoices = res
     })
   }
@@ -223,8 +225,9 @@ export class DashboardComponent implements OnDestroy {
   getProduct(): Subscription {
     return this.productService.get().subscribe(res => {
       const total = res.length||0
-      this.briefcaseCard.total = total;
+      this.totalProduct.total = total;
       this.products = res
+      this.totalStock.total = res.map(x => x.unitInStock).reduce((a, b) => (a ? parseInt(a) : 0) + (b ? parseInt(b) : 0), 0);
     });
   }
 
@@ -232,8 +235,8 @@ export class DashboardComponent implements OnDestroy {
     return this.salesService.get().subscribe(res => {
       const totalSalesAmount = res.map(x => x.totalPrice).reduce((a, b) => (a ? parseInt(a) : 0) + (b ? parseInt(b) : 0), 0);
       const totalSales = res.length ||0;
-      this.moneyCard.total = totalSales;
-      this.profitCard.total = totalSalesAmount
+      this.totalSale.total = totalSales;
+      this.totalSaleAmount.total = totalSalesAmount
     });
   }
 
