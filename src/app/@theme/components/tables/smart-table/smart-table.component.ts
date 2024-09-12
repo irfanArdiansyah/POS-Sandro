@@ -186,7 +186,7 @@ export class SmartTableComponent implements OnChanges {
         else if(value?.length == 28){
           value = "#"+value.substring(value.length, value.length - 6)
         }
-        else if(value?.length > 20){
+        else if(value?.length > 40){
           value = value.substring(value.length, value.length - 6) + '...'
         }
         tds.push(value);
