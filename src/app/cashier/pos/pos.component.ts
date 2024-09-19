@@ -51,7 +51,7 @@ export class PosComponent implements OnDestroy {
           this.userProfile = token.getPayload();
           this.data = {
             saleDate: moment().format("MMM DD, YYYY, hh:mm a"),
-            cashierId: this.userProfile.user_id,
+            cashierId: localStorage.getItem('uid'),
             totalAmount: '',
             paymentMethod: '',
             taxAmount: '5',

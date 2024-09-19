@@ -190,7 +190,7 @@ export class DashboardComponent implements OnDestroy {
   }
 
   private getProfileById() {
-    return this.userService.getbyId(this.userProfile.user_id).subscribe(res => {
+    return this.userService.getbyId(localStorage.getItem('uid')).subscribe(res => {
       this.firstName = res.firstName
     });
   }

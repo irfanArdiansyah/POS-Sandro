@@ -65,21 +65,22 @@ export class PosComponent implements OnDestroy {
       .subscribe((token: NbAuthJWTToken) => {
         if (token) {
           this.userProfile = token.getPayload();
-          this._profile.getbyId(this.userProfile.user_id).subscribe((res) => {
-            if (res) {
-              this.data = {
-                saleDate: moment().format("MMM DD, YYYY, hh:mm a"),
-                cashierId: this.userProfile.user_id,
-                cashierName: res.firstName,
-                totalAmount: '',
-                paymentMethod: 'Cash',
-                taxAmount: '0',
-                discountAmount: '0',
-                netAmount: '',
-                status: '',
-              };
-            }
-          })
+          if(this.userProfile?.user_id)
+            this._profile.getbyId(localStorage.getItem('uid')).subscribe((res) => {
+              if (res) {
+                this.data = {
+                  saleDate: moment().format("MMM DD, YYYY, hh:mm a"),
+                  cashierId: localStorage.getItem('uid'),
+                  cashierName: res.firstName,
+                  totalAmount: '',
+                  paymentMethod: 'Cash',
+                  taxAmount: '0',
+                  discountAmount: '0',
+                  netAmount: '',
+                  status: '',
+                };
+              }
+            })
         }
 
       });

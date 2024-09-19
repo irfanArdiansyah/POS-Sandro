@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((token: NbAuthJWTToken) => {
         if (token) {
           this.userProfile = token.getPayload();
-          this.user= {name:this.userProfile?.name || this.userProfile?.email || 'No Name', picture:''}
+          this.user= {name:this.userProfile?.name || this.userProfile?.email || localStorage.getItem('email') || 'No Name', picture:''}
         }
 
       });

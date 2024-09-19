@@ -35,7 +35,7 @@ export class PagesComponent {
         if (token) {
           this.userProfile = token.getPayload();
           if(this.userProfile)
-            this._profile.getbyId(this.userProfile.user_id).subscribe(async res=>{
+            this._profile.getbyId(localStorage.getItem('uid')).subscribe(async res=>{
               if(res){
                 this.profile = res
                 if(this.profile.role == 'cashier'){
@@ -54,8 +54,8 @@ export class PagesComponent {
                   role:"cashier",
                   lastName:"",
                   status:"Active",
-                  userKey:this.userProfile.user_id,
-                  key:this.userProfile.user_id
+                  userKey:localStorage.getItem('uid'),
+                  key:localStorage.getItem('uid')
                 }
                 await this._profile.set(param)
               }

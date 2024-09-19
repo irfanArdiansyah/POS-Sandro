@@ -37,7 +37,7 @@ export class ECommerceComponent implements OnDestroy {
   }
 
   private getProfileById() {
-    return this.profileService.getbyId(this.userProfile.user_id).subscribe(res => {
+    return this.profileService.getbyId(localStorage.getItem('uid')).subscribe(res => {
       this.firstName = res.firstName
     });
   }

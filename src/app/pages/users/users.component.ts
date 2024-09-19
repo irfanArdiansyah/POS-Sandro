@@ -106,6 +106,7 @@ export class UsersComponent implements OnDestroy {
     this.responds = null
     const param = event.newData
     param.password = 12345678
+    localStorage.setItem('realEmail', localStorage.getItem('email'))
     await this.auth.addUser(param)
       .then(async (userCredential) => {
         const user = userCredential.user;
@@ -133,6 +134,7 @@ export class UsersComponent implements OnDestroy {
         signOut(this.auth.secondaryAuth)
         event.confirm.resolve();
         this.subcription.push(this.getUsers())
+        localStorage.setItem('email', localStorage.getItem('realEmail'))
       }).catch(err => { 
         event.confirm.reject();
         this.responds = this.popup.errorData(`Terjadi kesalahan mohon coba beberapa saat lagi!`); this.loading = false; 

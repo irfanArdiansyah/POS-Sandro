@@ -74,7 +74,7 @@ export class OrderListComponent {
   //       const param = {
   //         type: 'Payment',
   //         saleDate: moment().toISOString(),
-  //         cashierId: this.userProfile.user_id,
+  //         cashierId: localStorage.getItem('uid'),
   //         totalAmount: '',
   //         paymentMethod: '',
   //         taxAmount: '5',
