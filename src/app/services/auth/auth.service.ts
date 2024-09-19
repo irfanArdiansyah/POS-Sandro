@@ -53,7 +53,7 @@ export class AuthService {
   }
 
   addUser(profile: any) {
-    this.secondaryApp = initializeApp(environment.firebase)
+    this.secondaryApp = initializeApp(environment.firebase, 'Secondary')
     this.secondaryAuth = getAuth(this.secondaryApp)
     return createUserWithEmailAndPassword(this.secondaryAuth, profile.email, profile.password)
   }
