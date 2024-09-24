@@ -66,11 +66,11 @@ export class PosComponent implements OnDestroy {
         if (token) {
           this.userProfile = token.getPayload();
           if(this.userProfile?.user_id)
-            this._profile.getbyId(localStorage.getItem('uid')).subscribe((res) => {
+            this._profile.getbyId(this.userProfile.user_id).subscribe((res) => {
               if (res) {
                 this.data = {
                   saleDate: moment().format("MMM DD, YYYY, hh:mm a"),
-                  cashierId: localStorage.getItem('uid'),
+                  cashierId: this.userProfile.user_id,
                   cashierName: res.firstName,
                   totalAmount: '',
                   paymentMethod: 'Cash',
