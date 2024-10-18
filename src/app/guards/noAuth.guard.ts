@@ -14,8 +14,10 @@ export class noAuthGuard implements CanActivate {
 
   canActivate(): boolean {
     if (localStorage.getItem('auth_app_token')) {
+      if(JSON.parse(localStorage.getItem('auth_app_token')).value==''){
+        return true;
+      }
       this.router.navigateByUrl('pages/admin-dashboard');
-
       return false;
     }
 
