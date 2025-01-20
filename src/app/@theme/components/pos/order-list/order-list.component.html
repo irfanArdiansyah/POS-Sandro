@@ -74,12 +74,12 @@
                 <div class="col">
                     <button class="mr-1 w-100" nbButton (click)="data.paymentMethod = 'Cash'" [status]="data.paymentMethod == 'Cash' ?'success':'basic'">Cash</button>
                 </div>
-                <div class="col">
+                <!-- <div class="col">
                     <button class="mr-1 w-100" nbButton (click)="data.paymentMethod = 'Debit Card'" [status]="data.paymentMethod == 'Debit Card' ?'success':'basic'">Debit</button>
                 </div>
                 <div class="col">
                     <button class="mr-1 w-100" nbButton (click)="data.paymentMethod = 'Scan'" [status]="data.paymentMethod == 'Scan'?'success':'basic'">Scan</button>
-                </div>
+                </div> -->
               </div>
           </div>
 
@@ -90,9 +90,6 @@
           </div>
 
           <div class="row mt-4">
-                <div class="col">
-                    <button nbButton class="mr-1 w-100" status="primary" (click)="result.emit('Hold')">Hold</button>
-                </div>
                 <div class="col">
                     <button nbButton class="mr-1 w-100" status="danger" (click)="result.emit('Delete')">Delete</button>
                 </div>
