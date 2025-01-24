@@ -13,6 +13,8 @@ import { DatepickerCustomComponent } from '../../@theme/components/tables/datepi
 import { ProfileService } from '../../services/profile/profile.service';
 import { DisplayInputComponent } from '../../@theme/components/tables/display-input/display-input.component';
 import { CustomInputComponent } from '../../@theme/components/tables/custom-input/custom-input.component';
+import { SalesService } from '../../services/sales/sales.service';
+import { ProductService } from '../../services/product/product.service';
 
 @Component({
   selector: 'ngx-invoices',
@@ -162,16 +164,24 @@ export class InvoicesComponent {
   }
   timeout: NodeJS.Timeout;
   cashiers: any;
+  product: any;
+  products:any = []
+  sales: any;
+  salesSub: Subscription;
 
   constructor(
     private _invoices: InvoicesService,
     private auth: AuthService,
     private popup: PopupNotifService,
     private _profile:ProfileService,
+    private _sales: SalesService,
+    private _products: ProductService,
     private countServ: CountsService
   ) {
     this.subcription.push(this.getCurrentUser())
     this.subcription.push(this.getInvoices())
+    this.subcription.push(this.getProducts())
+    this.subcription.push(this.getSales())
     this.subcription.push(this.getCashier())
   }
 
@@ -207,11 +217,28 @@ export class InvoicesComponent {
   getInvoices(): Subscription {
     return this._invoices.get().subscribe(res => {
       if (res) {
-        this.data = res
+        this.data = this.auth.sortByDate(res, 'saleDate')
       }
       this.loading = false;
     })
   }
+
+  getSales(){
+    return this.salesSub = this._sales.get().subscribe(res => {
+      this.sales = res||[]
+    })
+  }
+
+  getProducts(){
+   return this._products.get().subscribe(async res => {
+      this.products = res
+    })
+  }
+
+  deleteSale(key){
+    this._sales.remove(key).catch()
+  }
+  
 
   async onCreate(event) {
     this.responds = null
@@ -264,6 +291,17 @@ export class InvoicesComponent {
         .then(res => {
           // let param: any = { totalUser: this.totalUser - 1 }
           // this.countsServ.update(param)
+          let selectedSales = this.sales.filter(x=>x.receiptNumber == element.key) || []
+          if(selectedSales.length > 0){
+            selectedSales.forEach(sale => {
+            let product = this.products.filter(x=>x.key == sale.productId)[0]
+              if(product){
+                product.unitInStock = product.unitInStock + sale.quantity
+                this._products.update(product).catch()
+                this.deleteSale(sale.key)
+              }
+            });
+          }
           this.loading = false
           this.responds = this.popup.succesData("Berhasil menghapus Data")
           this.handleRespondsTime(3000);

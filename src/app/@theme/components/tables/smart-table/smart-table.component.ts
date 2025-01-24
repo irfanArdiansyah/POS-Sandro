@@ -4,6 +4,7 @@ import { SmartTableData } from '../../../../@core/data/smart-table';
 import { AttachmentService } from '../../../../services/attachment/attachment.service';
 import * as moment from 'moment';
 import { ExcelService } from '../../../../services/excel/excel.service';
+import { PopupNotifService } from '../../../../services/notifications/popup-notif.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class SmartTableComponent implements OnChanges {
   @Output() onDelete = new EventEmitter<any>();
   @Output() onCreate = new EventEmitter<any>();
   @Output() onEdit = new EventEmitter<any>();
+  dateReport
   settings:any = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -38,11 +40,13 @@ export class SmartTableComponent implements OnChanges {
     }
   };
   source: any = new LocalDataSource();
+  reportData: any = [];
 
   constructor(
     private service: SmartTableData,
     private attachmentServ:AttachmentService,
-    public excelServ:ExcelService
+    public excelServ:ExcelService,
+    private popup:PopupNotifService
 
   ) {
     if (this.columns) {
@@ -132,12 +136,22 @@ export class SmartTableComponent implements OnChanges {
   }
 
   downloadReport(){
-    this.attachmentServ.downloadExcel(this.source.data, "Data " + this.title + moment().format("_DD_MM_YYYY_hh_mm_ss"))
+    if(this.dateReport == null)return this.popup.errorData("Please select start end date first", 'popup')
+    if(this.reportData.length == 0) return this.popup.errorData("No Report Found", 'popup')
+    let startDate='';
+    let endDate='';
+    if(this.dateReport.start)
+     startDate = moment(this.dateReport.start).format("_DD_MM_YYYY")
+    if(this.dateReport.end)
+      endDate = moment(this.dateReport.end).format("_DD_MM_YYYY")
+    this.attachmentServ.downloadExcel(this.reportData, "Data " + this.title + startDate + endDate)
   }
 
 
   downloadReportPDF(){
-    let param = this.source.data.map(x => {
+    if(this.dateReport == null)return this.popup.errorData("Please select start end date first", 'popup')
+    if(this.reportData.length == 0) return this.popup.errorData("No Report Found", 'popup')
+    let param = this.reportData.map(x => {
       let arr:any = Object.keys(this.columns)
       let fields = {}
       arr.filter(y=>{
@@ -147,7 +161,13 @@ export class SmartTableComponent implements OnChanges {
     })
     this.getReportPDFReady(param);
     setTimeout(() => {
-      this.excelServ.downloadReport(this.source.data, "Data " + this.title + moment().format("_DD_MM_YYYY_hh_mm_ss"))
+      let startDate='';
+      let endDate='';
+      if(this.dateReport.start)
+       startDate = moment(this.dateReport.start).format("_DD_MM_YYYY")
+      if(this.dateReport.end)
+        endDate = moment(this.dateReport.end).format("_DD_MM_YYYY")
+      this.excelServ.downloadReport(this.reportData, "Data " + this.title + startDate + endDate)
     }, 1000);
   }
 
@@ -194,6 +214,29 @@ export class SmartTableComponent implements OnChanges {
       this.excelServ.trs.push(tds);
     }); 
     
+  }
+
+  updateValue(){
+    if(this.source.data?.length > 0){
+      if(this.source.data.filter(x=>x.dateUpdated).length > 0){
+        if(this.dateReport.start && this.dateReport.end)
+          return this.reportData = this.source.data.filter(x=>moment(new Date(x.dateUpdated)) >= moment(this.dateReport.start) && moment(new Date(x.dateUpdated)) <= moment(this.dateReport.end))
+        if(this.dateReport.start)
+          return this.reportData = this.source.data.filter(x=>moment(new Date(x.dateUpdated)).format("DD/MMM/YYYY") == moment(this.dateReport.start).format("DD/MMM/YYYY"))
+        if(this.dateReport.end)
+          return this.reportData = this.source.data.filter(x=>moment(new Date(x.dateUpdated)).format("DD/MMM/YYYY") == moment(this.dateReport.end).format("DD/MMM/YYYY"))
+      }else if(this.source.data.filter(x=>x.saleDate).length > 0){
+        if(this.dateReport.start && this.dateReport.end)
+          return this.reportData = this.source.data.filter(x=>moment(new Date(x.saleDate)) >= moment(this.dateReport.start) && moment(new Date(x.saleDate)) <= moment(this.dateReport.end))
+        if(this.dateReport.start)
+          return this.reportData = this.source.data.filter(x=>moment(new Date(x.saleDate)).format("DD/MMM/YYYY") == moment(this.dateReport.start).format("DD/MMM/YYYY"))
+        if(this.dateReport.end)
+          return this.reportData = this.source.data.filter(x=>moment(new Date(x.saleDate)).format("DD/MMM/YYYY") == moment(this.dateReport.end).format("DD/MMM/YYYY"))
+      }else{
+        this.reportData = this.source.data
+      }
+    }
+
   }
 
 }

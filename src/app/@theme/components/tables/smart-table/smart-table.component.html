@@ -1,12 +1,19 @@
 <nb-card>
   <nb-card-header>
     <div class="row">
-      <div class="col-xxl-6">
+      <div class="col-xxl-4">
         {{title}}
       </div>
-      <div class="col-xxl-6">
+      <div class="col-xxl-8">
+         
+        <nb-rangepicker #rangePicker></nb-rangepicker>
         <button nbButton class="float-right" (click)="downloadReport()"><nb-icon icon="download-outline"></nb-icon>Download Report Excel</button>
         <button nbButton class="float-right mr-4" (click)="downloadReportPDF()"><nb-icon icon="download-outline"></nb-icon>Download Report PDF</button>
+        <input style="width: 220px;" class="float-right mr-4" [nbDatepicker]="rangePicker"
+        [(ngModel)]="dateReport"
+        nbInput 
+        (ngModelChange)="updateValue()"
+        placeholder="Start End Date">
       </div>
     </div>
   </nb-card-header>

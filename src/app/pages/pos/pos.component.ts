@@ -140,16 +140,16 @@ export class PosComponent implements OnDestroy {
           this.handleRespondsTime(3000);
         }
         
+        this.subcription.push(this.getInvoice())
+        this.subcription.push(this.getSaleByInvoice())
+        selectedProduct.forEach(async product => {
+          await this.createSales(this.completedInvoicesRef, product, invoices)
+        });
         let dialogRef = this.popup.showCustomPopup("Payment Completed", 'Do you want to Print Receipt for the Completed Order?', 'checkmark-circle-outline', 'pos', 'success')
         dialogRef.onClose.subscribe(res => {
           if(res?.res){
             if(res.type == 'print'){
-              this.subcription.push(this.getInvoice())
-              this.subcription.push(this.getSaleByInvoice())
               this.excelServ.exportToPDF("Invoice_#"+this.completedInvoicesRef.key.substr(this.completedInvoicesRef.key.length-5))
-              selectedProduct.forEach(async product => {
-                await this.createSales(this.completedInvoicesRef.key, product)
-              });
               // this.refresh()
             }else{
               this.refresh()
@@ -182,15 +182,16 @@ export class PosComponent implements OnDestroy {
     })
   }
 
-  async createSales(receiptNumber, product) {
+  async createSales(receipt, product, invoices) {
     const param = {
-      receiptNumber: receiptNumber,
+      receiptNumber: receipt.key,
       status: 'Active',
       productId:product.key,
       quantity:product.quantity,
       unitPrice:product.unitPrice,
       productName:product.productName,
       totalPrice:Number(product.unitPrice) * Number(product.quantity),
+      dateUpdated: invoices.saleDate
     }
     let res: any = await this._sales.push(param).catch(x => {
       return this.responds = this.popup.errorData(`Terjadi kesalahan mohon coba beberapa saat lagi!`); this.loading = false;

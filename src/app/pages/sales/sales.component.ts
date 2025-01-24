@@ -211,7 +211,7 @@ export class SalesComponent {
   getSales(): Subscription {
     return this._sales.get().subscribe(res => {
       if (res) {
-        this.data = res
+        this.data = this.auth.sortByDate(res, 'dateUpdated')
       }
       this.loading = false;
     })
@@ -285,6 +285,11 @@ export class SalesComponent {
         .then(res => {
           // let param: any = { totalUser: this.totalUser - 1 }
           // this.countsServ.update(param)
+          let product = this.products.filter(x=>x.key == element.productId)[0]
+          if(product){
+            product.unitInStock = product.unitInStock + element.quantity
+            this._products.update(product).catch()
+          }
           this.loading = false
           this.responds = this.popup.succesData("Berhasil menghapus Product")
           this.handleRespondsTime(3000);

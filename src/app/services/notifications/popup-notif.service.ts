@@ -42,6 +42,7 @@ export class PopupNotifService {
 
     showCustomPopup(title, message = "no message", icon, custom, status, isDblBtn = true) {
         return this.dialog.open(DialogComponent, {
+                closeOnBackdropClick:false,
                 context:{
                    title: title, 
                    message: message, 
