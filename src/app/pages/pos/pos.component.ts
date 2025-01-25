@@ -140,18 +140,24 @@ export class PosComponent implements OnDestroy {
           this.handleRespondsTime(3000);
         }
         
-        this.subcription.push(this.getInvoice())
-        this.subcription.push(this.getSaleByInvoice())
-        selectedProduct.forEach(async product => {
-          await this.createSales(this.completedInvoicesRef, product, invoices)
-        });
+      
         let dialogRef = this.popup.showCustomPopup("Payment Completed", 'Do you want to Print Receipt for the Completed Order?', 'checkmark-circle-outline', 'pos', 'success')
         dialogRef.onClose.subscribe(res => {
           if(res?.res){
             if(res.type == 'print'){
+              this.subcription.push(this.getInvoice())
+              this.subcription.push(this.getSaleByInvoice())
               this.excelServ.exportToPDF("Invoice_#"+this.completedInvoicesRef.key.substr(this.completedInvoicesRef.key.length-5))
+              selectedProduct.forEach(async product => {
+                await this.createSales(this.completedInvoicesRef, product, invoices)
+              });
               // this.refresh()
             }else{
+              this.subcription.push(this.getInvoice())
+              this.subcription.push(this.getSaleByInvoice())
+              selectedProduct.forEach(async product => {
+                await this.createSales(this.completedInvoicesRef, product, invoices)
+              });
               this.refresh()
             }
           }
